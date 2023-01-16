@@ -3754,6 +3754,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^4.7.1":
+  version: 4.8.1
+  resolution: "@prisma/client@npm:4.8.1"
+  dependencies:
+    "@prisma/engines-version": 4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: ecef3e2de129c7547ed51b8e5f6e6fafa7e92d28d3ea2197ff2937ffcdfc8aa6cde7fcf072fdffc324b0ae16622a0f89cad57cb3ffba159db844b58a94a103d5
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:4.7.1":
   version: 4.7.1
   resolution: "@prisma/debug@npm:4.7.1"
@@ -3791,6 +3805,13 @@ __metadata:
   version: 4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c
   resolution: "@prisma/engines-version@npm:4.7.1-1.272861e07ab64f234d3ffc4094e32bd61775599c"
   checksum: a5a15892d23409714afd81084028fce1b391661b4021fc4c3b8dd2a7cfadadb83323329f7fa9a1a40c11964baad9e6f8367fc909b627dd9885d4161d45a074ef
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe":
+  version: 4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe
+  resolution: "@prisma/engines-version@npm:4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe"
+  checksum: d59ed71a545d5141c4b853d265e503c874e165c591419b96de48806a3254901a6449c73e3e45cb4f480c76a562e0aed4f4c8a4933993d2de376dd2dda7a376b0
   languageName: node
   linkType: hard
 
@@ -7590,8 +7611,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:api"
   dependencies:
+    "@prisma/client": ^4.7.1
     "@redwoodjs/api": 3.8.0
     "@redwoodjs/graphql-server": 3.8.0
+    openai: ^3.1.0
   languageName: unknown
   linkType: soft
 
@@ -8090,6 +8113,15 @@ __metadata:
   version: 4.6.2
   resolution: "axe-core@npm:4.6.2"
   checksum: 5b8e7a15ec01b87a725bc80d7ca7f7b4bf9054a72df9975704ae55202e036622e213e815ee801a5b26ee35555f94b3248a5a96296e03946f0f81ec819cfbae8a
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.26.0":
+  version: 0.26.1
+  resolution: "axios@npm:0.26.1"
+  dependencies:
+    follow-redirects: ^1.14.8
+  checksum: 77ad7f1e6ca04fcd3fa8af1795b09d8b7c005b71a31f28d99ba40cda0bdcc12a4627801d7fac5efa62b9f667a8402bd54c669039694373bc8d44f6be611f785c
   languageName: node
   linkType: hard
 
@@ -12797,7 +12829,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.8":
   version: 1.15.2
   resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
@@ -18066,6 +18098,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openai@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "openai@npm:3.1.0"
+  dependencies:
+    axios: ^0.26.0
+    form-data: ^4.0.0
+  checksum: 42c7bdab888f9ae8c7dbe6d2a6c8ea5234092f7e7ffaaba311b94999f6bdfa65c4283cd7f2ef3c96f264530762ba24081263a2785e5fcd6446664e425473ae0a
+  languageName: node
+  linkType: hard
+
 "opener@npm:^1.5.2":
   version: 1.5.2
   resolution: "opener@npm:1.5.2"
@@ -20743,6 +20785,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@redwoodjs/core": 3.8.0
+    openai: ^3.1.0
     prettier-plugin-tailwindcss: ^0.2.1
   languageName: unknown
   linkType: soft
@@ -21095,11 +21138,11 @@ __metadata:
   linkType: hard
 
 "serialize-javascript@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "serialize-javascript@npm:6.0.0"
+  version: 6.0.1
+  resolution: "serialize-javascript@npm:6.0.1"
   dependencies:
     randombytes: ^2.1.0
-  checksum: 73104922ef0a919064346eea21caab99de1a019a1f5fb54a7daa7fcabc39e83b387a2a363e52a889598c3b1bcf507c4b2a7b26df76e991a310657af20eea2e7c
+  checksum: 1af427f4fee3fee051f54ffe15f77068cff78a3c96d20f5c1178d20630d3ab122d8350e639d5e13cde8111ef9db9439b871305ffb185e24be0a2149cec230988
   languageName: node
   linkType: hard
 
