@@ -11,9 +11,13 @@ export default async () => {
     // Update "const data = []" to match your data model and seeding needs
     //
 
+    // type UserData = Pick<
+    //   Prisma.UserCreateArgs['data'],
+    //   'firstName' | 'lastName' | 'email'
+    // >
     type UserData = Pick<
       Prisma.UserCreateArgs['data'],
-      'firstName' | 'lastName' | 'email'
+      'firstName' | 'lastName' | 'email' | 'JobApplication'
     >
     type UserDataWithPassword = UserData & { password: string }
     const usersData: UserDataWithPassword[] = [
@@ -57,6 +61,12 @@ export default async () => {
         recruiterEmail: 'recruiter@google.com',
         companyValues: "Google's company values",
       },
+      {
+        name: 'CSIT',
+        recruiterName: 'Recruiter CSIT',
+        recruiterEmail: 'recruiter@csit.com',
+        companyValues: "CSIT's company values",
+      },
     ] satisfies Prisma.CompanyCreateArgs['data'][]
     console.log(
       "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
@@ -64,24 +74,9 @@ export default async () => {
 
     // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
     // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-    Promise.all(
-      //
-      // Change to match your data model and seeding needs
-      //
-      ...usersData.map(async (userData) => {
-        const [hashedPassword, salt] = hashPassword(userData.password)
-        const record = await db.user.create({
-          data: {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            email: userData.email,
-            hashedPassword,
-            salt,
-          },
-        })
-        console.log(record)
-      }),
-      ...companies.map(async (company) => {
+
+    const companyPromises = await Promise.all(
+      companies.map(async (company) => {
         const record = await db.company.create({
           data: {
             name: company.name,
@@ -91,6 +86,58 @@ export default async () => {
           },
         })
         console.log(record)
+        return record
+      })
+    )
+
+    const userPromises = await Promise.all(
+      usersData.map(async (userData) => {
+        const [hashedPassword, salt] = hashPassword(userData.password)
+        const record = await db.user.create({
+          data: {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            hashedPassword,
+            salt,
+            JobApplication: {
+              create: [
+                {
+                  company: {
+                    connect: {
+                      id: 1,
+                    },
+                  },
+                  position: 'Software Engineer',
+                  status: 'Draft',
+                  country: 'Singapore',
+                },
+                {
+                  company: {
+                    connect: {
+                      id: 2,
+                    },
+                  },
+                  position: 'Data Analyst',
+                  status: 'Draft',
+                  country: 'Singapore',
+                },
+                {
+                  company: {
+                    connect: {
+                      id: 3,
+                    },
+                  },
+                  position: 'Product Manager',
+                  status: 'Sent',
+                  country: 'Singapore',
+                },
+              ],
+            },
+          },
+        })
+        console.log(record)
+        return record
       })
     )
 

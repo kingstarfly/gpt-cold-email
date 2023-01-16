@@ -35,12 +35,13 @@ model JobApplication {
   userId      Int
   companyId   Int
 
-  status      String // draft or sent
+  status      String // Draft or Sent
   position    String
   dateApplied DateTime?
 
   resumeContent  String?
   jobDescription String?
+  country       String?
   // Company values are in the Company model
 
   user    User    @relation(fields: [userId], references: [id])

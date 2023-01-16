@@ -8,7 +8,7 @@ import Routes from 'src/Routes'
 
 import './scaffold.css'
 import './index.css'
-import { createEmotionCache, MantineProvider } from '@mantine/core'
+import { createEmotionCache, Global, MantineProvider } from '@mantine/core'
 
 const myCache = createEmotionCache({ key: 'mantine', prepend: false })
 
@@ -20,9 +20,20 @@ const App = () => (
           <MantineProvider
             withGlobalStyles
             withNormalizeCSS
-            theme={{ fontFamily: 'Open Sans' }}
+            theme={{ fontFamily: 'Inter' }}
             emotionCache={myCache}
           >
+            <Global
+              styles={[
+                {
+                  '@font-face': {
+                    fontFamily: 'Inter',
+                    src: `local(''),
+                  url('../fonts/Inter-VariableFont_slnt,wght.ttf') format('ttf'),`,
+                  },
+                },
+              ]}
+            />
             <Routes />
           </MantineProvider>
         </RedwoodApolloProvider>

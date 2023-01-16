@@ -8,13 +8,14 @@ export const schema = gql`
     dateApplied: DateTime
     resumeContent: String
     jobDescription: String
+    country: String
     user: User!
     company: Company!
   }
 
   type Query {
-    jobApplications: [JobApplication!]! @requireAuth
-    jobApplication(id: Int!): JobApplication @requireAuth
+    jobApplications(userId: Int!): [JobApplication!]! @requireAuth
+    jobApplication(id: Int): JobApplication @requireAuth
   }
 
   input CreateJobApplicationInput {
@@ -25,6 +26,7 @@ export const schema = gql`
     dateApplied: DateTime
     resumeContent: String
     jobDescription: String
+    country: String
   }
 
   input UpdateJobApplicationInput {
@@ -35,6 +37,7 @@ export const schema = gql`
     dateApplied: DateTime
     resumeContent: String
     jobDescription: String
+    country: String
   }
 
   type Mutation {

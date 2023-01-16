@@ -6,11 +6,20 @@ import type {
 
 import { db } from 'src/lib/db'
 
-export const jobApplications: QueryResolvers['jobApplications'] = () => {
-  return db.jobApplication.findMany()
+export const jobApplications: QueryResolvers['jobApplications'] = ({
+  userId,
+}) => {
+  return db.jobApplication.findMany({
+    where: {
+      userId,
+    },
+  })
 }
 
 export const jobApplication: QueryResolvers['jobApplication'] = ({ id }) => {
+  if (!id) {
+    return null
+  }
   return db.jobApplication.findUnique({
     where: { id },
   })

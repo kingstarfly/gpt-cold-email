@@ -2,7 +2,7 @@ import { MetaTags } from '@redwoodjs/web'
 import JobApplicationCell from 'src/components/JobApplicationCell'
 
 type Props = {
-  id: number
+  id?: number
 }
 
 const JobApplicationPage = ({ id }: Props) => {
