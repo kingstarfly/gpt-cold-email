@@ -1,12 +1,15 @@
+
 # ColdMaiL
 
-![image](https://user-images.githubusercontent.com/60282894/212743538-2d667cb5-66c2-4e6e-b4b8-3637628aa4ce.png)
+<img src="https://user-images.githubusercontent.com/38955962/212740229-80f690da-70fa-4e27-9627-5f61d670151d.png" width="100" height="100" />
 
+Introducing ColdMaiL - an advanced AI web app that reads your resume and creates a tailored cold email and sends it to your desired tech company. The email is personalized, professional, and tailored to highlight how you are a good fit at the company!
 
-Introducing ColdMaiL - an advanced AI machine that reads your resume and creates a tailored cold email job application to your desired tech company, making it personalized, professional, and tailored to the specific needs of the company!
-
+## Web App Screenshots
+![image](https://user-images.githubusercontent.com/38955962/212739722-6cc7abed-2404-47af-84c8-bc5c4f7c3681.png)
+![image](https://user-images.githubusercontent.com/38955962/212739559-9a4c109b-f0d3-49cd-a7c8-d8bb12ff582c.png)
 ## Motivation
-Struggling with job application? That's a problem that we face too! That's why we created ColdMaiL, an AI powered cold email generator for job application. Craft personalized cold emails to employers and increasing your chances of landing interviews today!
+Struggling with job application? That's a problem that we face too! That's why we created ColdMaiL, an AI powered cold email generator to help you increase your chances of landing interviews!
 
 ### Why cold emails?
 
@@ -14,13 +17,8 @@ Cold emails are more effective than applications in the job portal because they 
 
 ## Installation
 
-This README assumes that [NodeJS](https://nodejs.org/en/) is already installed on the system.
-
-
-This project depends on yarn for package installation. Install yarn with the following command
-```bash
-  npm install --global yarn
-```
+- [Node.js](https://nodejs.org/en/download/) (>=14.19.x <=16.x) is required
+- [Yarn](https://yarnpkg.com/getting-started/install) (>=1.15) is required
 
 Install project dependencies with yarn
 
