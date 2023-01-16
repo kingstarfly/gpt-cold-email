@@ -22,6 +22,8 @@
     "@redwoodjs/forms": "3.8.0",
     "@redwoodjs/router": "3.8.0",
     "@redwoodjs/web": "3.8.0",
+    "@types/filestack-react": "^4.0.1",
+    "filestack-react": "^4.0.1",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",

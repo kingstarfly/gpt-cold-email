@@ -39,7 +39,7 @@ model JobApplication {
   position    String
   dateApplied DateTime?
 
-  resumeContent  String?
+  resumeUrl  String?
   jobDescription String?
   country       String?
   // Company values are in the Company model

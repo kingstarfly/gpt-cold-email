@@ -3,10 +3,12 @@ import type {
   FindJobApplicationQueryVariables,
 } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import { useAuth } from '@redwoodjs/auth'
-import { Link, routes } from '@redwoodjs/router'
+
 import { FileInput, Textarea, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { showNotification } from '@mantine/notifications'
+import { useAuth } from '@redwoodjs/auth'
+import { PickerDropPane, PickerInline } from 'filestack-react'
 
 export const QUERY = gql`
   query FindJobApplicationQuery($id: Int) {
@@ -52,6 +54,7 @@ const JobApplicationContent = ({
   CellSuccessProps<FindJobApplicationQuery, FindJobApplicationQueryVariables>
 >) => {
   const { currentUser, isAuthenticated, logOut } = useAuth()
+  const [resumeUrl, setResumeUrl] = React.useState('')
   const [emailContent, setEmailContent] = React.useState('')
   const form = useForm({
     initialValues: {
@@ -59,7 +62,7 @@ const JobApplicationContent = ({
       companyValues: jobApplication?.company?.companyValues ?? '',
       jobPosition: jobApplication?.position ?? '',
       jobDescription: jobApplication?.jobDescription ?? '',
-      resumeFile: '',
+      resumeUrl: '',
     },
 
     validate: {
@@ -87,15 +90,27 @@ const JobApplicationContent = ({
   })
 
   function handleSend() {
-    // TODO: Send email
+    showNotification({
+      title: 'Success',
+      message: 'Email has been sent!',
+      autoClose: 2000,
+    })
     console.log(emailContent)
+  }
+
+  function handleGenerateEmail() {
+    form.onSubmit((values) => {
+      // Send values and also the resumeurl
+      const data = { ...values, resumeUrl }
+      // TODO: Connect to service
+    })
   }
   return (
     <>
-      <div className="flex flex-1 py-4 border-r-2 border-r-slate-800">
+      <div className="flex flex-1 border-r-2 border-r-slate-800">
         <form
           className="flex flex-col flex-1 gap-8 px-16"
-          onSubmit={form.onSubmit((values) => console.log(values))}
+          onSubmit={handleGenerateEmail}
         >
           <h1 className="text-4xl font-semibold">
             {jobApplication?.status ?? 'New'} Application
@@ -131,17 +146,18 @@ const JobApplicationContent = ({
             disabled={jobApplication?.status === 'Sent'}
           />
 
-          <FileInput
-            label="Your resume"
-            placeholder="Choose a file"
-            variant="default"
-            required
-            {...form.getInputProps('resumeFile')}
-            disabled={jobApplication?.status === 'Sent'}
+          <PickerDropPane
+            pickerOptions={{
+              accept: ['.pdf', 'text/*'],
+            }}
+            onUploadDone={(res) => {
+              setResumeUrl(res.url)
+            }}
+            apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
           />
           <button
             type="submit"
-            className="self-center px-4 py-2 text-lg bg-teal-300 rounded hover:bg-teal-200 hover:outline hover:outline-2 hover:outline-teal-700"
+            className="self-center px-4 py-2 text-lg bg-blue-300 rounded hover:bg-blue-200 hover:outline hover:outline-2 hover:outline-blue-700"
           >
             Generate
           </button>
@@ -167,7 +183,7 @@ const JobApplicationContent = ({
             minRows={20}
           />
           <button
-            className="px-4 py-2 text-base bg-teal-300 rounded hover:bg-teal-200 hover:outline hover:outline-2 hover:outline-teal-700"
+            className="px-4 py-2 text-base bg-blue-300 rounded hover:bg-blue-200 hover:outline hover:outline-2 hover:outline-blue-700"
             onClick={() => handleSend()}
           >
             Send Email

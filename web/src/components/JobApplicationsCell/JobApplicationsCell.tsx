@@ -19,7 +19,7 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <Success jobApplications={null} />
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
@@ -27,11 +27,11 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({
   jobApplications,
-}: CellSuccessProps<JobApplicationsQuery>) => {
-  const draftApplications = jobApplications.filter(
+}: Partial<CellSuccessProps<JobApplicationsQuery>>) => {
+  const draftApplications = jobApplications?.filter(
     (item) => item.status === 'Draft'
   )
-  const sentApplications = jobApplications.filter(
+  const sentApplications = jobApplications?.filter(
     (item) => item.status === 'Sent'
   )
 
@@ -45,7 +45,7 @@ export const Success = ({
       <div>
         <div className="flex flex-row items-end justify-between">
           <h2 className="text-3xl font-semibold">
-            Draft {`(${draftApplications.length})`}
+            Draft {`(${draftApplications?.length ?? 0})`}
           </h2>
           <button
             className="font-semibold opacity-50 cursor-pointer hover:opacity-100"
@@ -55,17 +55,17 @@ export const Success = ({
           </button>
         </div>
         <div className="flex flex-col gap-4 mt-8">
-          {draftApplications.map((item) => {
+          {draftApplications?.map((item) => {
             return <ApplicationCard key={item.id} item={item} />
           })}
         </div>
       </div>
       <div>
         <h2 className="text-3xl font-semibold">
-          Sent {`(${sentApplications.length})`}
+          Sent {`(${sentApplications?.length ?? 0})`}
         </h2>
         <div className="flex flex-col gap-4 mt-8">
-          {sentApplications.map((item) => {
+          {sentApplications?.map((item) => {
             return <ApplicationCard key={item.id} item={item} />
           })}
         </div>
