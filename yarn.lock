@@ -8068,8 +8068,8 @@ __metadata:
     "@prisma/client": ^4.7.1
     "@redwoodjs/api": 3.8.0
     "@redwoodjs/graphql-server": 3.8.0
-    textract: ^2.5.0
     openai: ^3.1.0
+    textract: ^2.5.0
   languageName: unknown
   linkType: soft
 
@@ -13612,7 +13612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.10.0, follow-redirects@npm:^1.14.8":
   version: 1.15.2
   resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
@@ -19664,6 +19664,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"performance-now@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "performance-now@npm:2.1.0"
+  checksum: 22c54de06f269e29f640e0e075207af57de5052a3d15e360c09b9a8663f393f6f45902006c1e71aa8a5a1cdfb1a47fe268826f8496d6425c362f00f5bc3e85d9
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^0.2.1":
   version: 0.2.1
   resolution: "picocolors@npm:0.2.1"
@@ -20835,6 +20842,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"raf@npm:^3.4.0":
+  version: 3.4.1
+  resolution: "raf@npm:3.4.1"
+  dependencies:
+    performance-now: ^2.1.0
+  checksum: 337f0853c9e6a77647b0f499beedafea5d6facfb9f2d488a624f88b03df2be72b8a0e7f9118a3ff811377d534912039a3311815700d2b6d2313f82f736f9eb6e
+  languageName: node
+  linkType: hard
+
 "ramda@npm:0.21.0":
   version: 0.21.0
   resolution: "ramda@npm:0.21.0"
@@ -21081,6 +21097,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-simple-typewriter@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "react-simple-typewriter@npm:5.0.1"
+  peerDependencies:
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: a9bc04d401be922e86ba9e648bc61021613217f47d07705e0ae03e7fb60ea3f1163ba99834ef7211020550d2db818e460fe3512e2360e047742d5d98dce1344b
+  languageName: node
+  linkType: hard
+
 "react-sizeme@npm:^3.0.1":
   version: 3.0.2
   resolution: "react-sizeme@npm:3.0.2"
@@ -21121,6 +21147,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-typewriter-effect@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-typewriter-effect@npm:1.1.0"
+  dependencies:
+    react: ^16.10.2
+    style-loader: ^1.0.0
+    webpack: ^4.41.2
+  peerDependencies:
+    react: ^16.10.2
+  checksum: 6fbc4a96b79656e39586b84ddfc11c792ab0413f3eabca5f6607fc37d64b1744ea7ad41ee85ce20b290c036a97eeff59c2a5dd890bb786b37339cee2a1a281d8
+  languageName: node
+  linkType: hard
+
 "react@npm:17.0.2":
   version: 17.0.2
   resolution: "react@npm:17.0.2"
@@ -21128,6 +21167,17 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: 07ae8959acf1596f0550685102fd6097d461a54a4fd46a50f88a0cd7daaa97fdd6415de1dcb4bfe0da6aa43221a6746ce380410fa848acc60f8ac41f6649c148
+  languageName: node
+  linkType: hard
+
+"react@npm:^16.10.2":
+  version: 16.14.0
+  resolution: "react@npm:16.14.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+    prop-types: ^15.6.2
+  checksum: df8faae43e01387013900e8f8fb3c4ce9935b7edbcbaa77e12999c913eb958000a0a8750bf9a0886dae0ad768dd4a4ee983752d5bade8d840adbe0ce890a2438
   languageName: node
   linkType: hard
 
@@ -23141,7 +23191,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-loader@npm:^1.3.0":
+"style-loader@npm:^1.0.0, style-loader@npm:^1.3.0":
   version: 1.3.0
   resolution: "style-loader@npm:1.3.0"
   dependencies:
@@ -24151,6 +24201,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typewriter-effect@npm:^2.19.0":
+  version: 2.19.0
+  resolution: "typewriter-effect@npm:2.19.0"
+  dependencies:
+    prop-types: ^15.6.2
+    raf: ^3.4.0
+  peerDependencies:
+    react: ^17.x || ^18.x
+    react-dom: ^17.x || ^18.x
+  checksum: ebddca89ec5cd504f3aa0097095f97fe0b8b10d5a3e56a20d6f2afdd988a0bf41358f85a2f40b34d2070bdb98d9276d0509b0ff9a435af1574234e33f140946c
+  languageName: node
+  linkType: hard
+
 "ua-parser-js@npm:^0.7.30":
   version: 0.7.32
   resolution: "ua-parser-js@npm:0.7.32"
@@ -25008,7 +25071,10 @@ __metadata:
     react: 17.0.2
     react-dom: 17.0.2
     react-icons: ^4.7.1
+    react-simple-typewriter: ^5.0.1
+    react-typewriter-effect: ^1.1.0
     tailwindcss: ^3.2.4
+    typewriter-effect: ^2.19.0
   languageName: unknown
   linkType: soft
 
@@ -25287,7 +25353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:4, webpack@npm:^4.44.2":
+"webpack@npm:4, webpack@npm:^4.41.2, webpack@npm:^4.44.2":
   version: 4.46.0
   resolution: "webpack@npm:4.46.0"
   dependencies:

@@ -51,21 +51,22 @@ export default async () => {
     const companies = [
       {
         name: 'Meta',
-        recruiterName: 'Recruiter Meta',
-        recruiterEmail: 'recruiter@meta.com',
-        companyValues: "Meta's company values",
+        recruiterName: 'Abigail Tan',
+        recruiterEmail: 'abigailtan@meta.com',
+        companyValues: 'Be bold, focus on impact, move fast, be open.',
       },
       {
         name: 'Google',
-        recruiterName: 'Recruiter Google',
-        recruiterEmail: 'recruiter@google.com',
-        companyValues: "Google's company values",
+        recruiterName: 'Abigail Tan',
+        recruiterEmail: 'abigailtan@google.com',
+        companyValues:
+          "Focus on the user, do one thing really well, great just isn't good enough.",
       },
       {
         name: 'CSIT',
-        recruiterName: 'Recruiter CSIT',
-        recruiterEmail: 'recruiter@csit.com',
-        companyValues: "CSIT's company values",
+        recruiterName: 'Abigail Tan',
+        recruiterEmail: 'abigailtan@csit.com',
+        companyValues: 'integrity, innovation, agility, lifelong-learning.',
       },
     ] satisfies Prisma.CompanyCreateArgs['data'][]
     console.log(

@@ -1,14 +1,26 @@
 import type {
   FindJobApplicationQuery,
   FindJobApplicationQueryVariables,
+  GenerateColdEmail,
+  Openai,
 } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import { FileInput, Textarea, TextInput } from '@mantine/core'
+import {
+  Anchor,
+  Button,
+  FileInput,
+  Group,
+  Textarea,
+  TextInput,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
 import { useAuth } from '@redwoodjs/auth'
-import { PickerDropPane, PickerInline } from 'filestack-react'
+import { PickerDropPane } from 'filestack-react'
+import { useLazyQuery } from '@apollo/client'
+import { GenerateColdEmailVariables } from '../../../types/graphql'
+import TypewriterTextarea from '../TypewriterTextarea/TypewriterTextarea'
 
 export const QUERY = gql`
   query FindJobApplicationQuery($id: Int) {
@@ -48,6 +60,26 @@ export const Success = ({
   return <JobApplicationContent jobApplication={jobApplication} />
 }
 
+const GENERATE_EMAIL_QUERY = gql`
+  query GenerateColdEmail(
+    $resumeUrl: String!
+    $description: String!
+    $companyValues: String!
+    $recruiterName: String!
+  ) {
+    getColdEmail(
+      resumeUrl: $resumeUrl
+      description: $description
+      companyValues: $companyValues
+      recruiterName: $recruiterName
+    ) {
+      text
+      index
+      finish_reason
+    }
+  }
+`
+
 const JobApplicationContent = ({
   jobApplication,
 }: Partial<
@@ -55,7 +87,18 @@ const JobApplicationContent = ({
 >) => {
   const { currentUser, isAuthenticated, logOut } = useAuth()
   const [resumeUrl, setResumeUrl] = React.useState('')
+  const [resumeFileName, setResumeFileName] = React.useState('')
   const [emailContent, setEmailContent] = React.useState('')
+  const [isGenerating, setIsGenerating] = React.useState(false)
+  const [isEditing, setIsEditing] = React.useState(false)
+
+  const [hasUploaded, setHasUploaded] = React.useState(false)
+
+  const [generateColdEmailContent] = useLazyQuery<
+    GenerateColdEmail,
+    GenerateColdEmailVariables
+  >(GENERATE_EMAIL_QUERY)
+
   const form = useForm({
     initialValues: {
       companyName: jobApplication?.company?.name ?? '',
@@ -98,19 +141,36 @@ const JobApplicationContent = ({
     console.log(emailContent)
   }
 
-  function handleGenerateEmail() {
-    form.onSubmit((values) => {
-      // Send values and also the resumeurl
-      const data = { ...values, resumeUrl }
-      // TODO: Connect to service
+  async function handleGenerateEmail() {
+    setIsGenerating(true)
+    console.log('Attempt to generate email')
+    console.log('resumeUrl', resumeUrl)
+    console.log('jobDescription', form.values.jobDescription)
+
+    console.log(form.values)
+
+    const { data, loading, error } = await generateColdEmailContent({
+      variables: {
+        description: form.values.jobDescription,
+        companyValues: form.values.companyValues,
+        resumeUrl: resumeUrl,
+        recruiterName: jobApplication.company.recruiterName,
+      },
     })
+
+    console.log(data)
+    setIsGenerating(false)
+    setEmailContent(data.getColdEmail.text)
   }
   return (
     <>
       <div className="flex flex-1 border-r-2 border-r-slate-800">
         <form
           className="flex flex-col flex-1 gap-8 px-16"
-          onSubmit={handleGenerateEmail}
+          onSubmit={(event) => {
+            event.preventDefault()
+            handleGenerateEmail()
+          }}
         >
           <h1 className="text-4xl font-semibold">
             {jobApplication?.status ?? 'New'} Application
@@ -145,22 +205,60 @@ const JobApplicationContent = ({
             required
             disabled={jobApplication?.status === 'Sent'}
           />
+          <div className="flex flex-col gap-1">
+            <label className="mb-0 mantine-InputWrapper-label mantine-Textarea-label mantine-ittua2">
+              Resume
+            </label>
+            {hasUploaded ? (
+              <div className="flex flex-col items-center">
+                <a className="underline" href={resumeUrl}>
+                  {resumeFileName}
+                </a>
+                <button
+                  className="text-red-400 hover:cursor-pointer"
+                  onClick={() => {
+                    setHasUploaded(false)
+                    setResumeFileName('')
+                    setResumeUrl('')
+                  }}
+                >
+                  Re-upload
+                </button>
+              </div>
+            ) : (
+              <PickerDropPane
+                pickerOptions={{
+                  disableTransformer: true,
+                  viewType: 'grid',
+                }}
+                onUploadDone={(res: any) => {
+                  console.log('Upload done')
+                  console.log(res)
+                  setHasUploaded(true)
+                  setResumeFileName(res.filesUploaded[0].filename)
+                  setResumeUrl(res.filesUploaded[0].url)
+                }}
+                onError={(err) => {
+                  setHasUploaded(true)
+                  console.log('I am at onError')
+                  console.log(err)
+                }}
+                apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
+              />
+            )}
+          </div>
 
-          <PickerDropPane
-            pickerOptions={{
-              accept: ['.pdf', 'text/*'],
-            }}
-            onUploadDone={(res) => {
-              setResumeUrl(res.url)
-            }}
-            apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
-          />
-          <button
-            type="submit"
-            className="self-center px-4 py-2 text-lg bg-blue-300 rounded hover:bg-blue-200 hover:outline hover:outline-2 hover:outline-blue-700"
-          >
-            Generate
-          </button>
+          <div className="flex flex-row justify-center">
+            <Button
+              type="submit"
+              loading={isGenerating}
+              variant="gradient"
+              gradient={{ from: '#1d4ed8', to: '#06b6d4' }}
+              disabled={resumeUrl === '' || form.values.jobDescription === ''}
+            >
+              Generate
+            </Button>
+          </div>
         </form>
       </div>
 
@@ -177,17 +275,52 @@ const JobApplicationContent = ({
             {jobApplication?.company.name}
           </p>
           <Textarea
-            label="Email Content"
-            value={emailContent}
+            value={
+              isGenerating
+                ? 'Generating your custom email...'
+                : emailContent
+                ? emailContent
+                : 'Click "Generate" to generate your custom email'
+            }
             onChange={(event) => setEmailContent(event.currentTarget.value)}
             minRows={20}
           />
-          <button
-            className="px-4 py-2 text-base bg-blue-300 rounded hover:bg-blue-200 hover:outline hover:outline-2 hover:outline-blue-700"
-            onClick={() => handleSend()}
-          >
-            Send Email
-          </button>
+          {/*
+          {!emailContent ? (
+            <Textarea
+              value={"Click 'Generate' to generate your custom email"}
+              minRows={20}
+            />
+          ) : isEditing ? (
+            <Textarea
+              value={
+                isGenerating ? 'Generating your custom email...' : emailContent
+              }
+              onChange={(event) => setEmailContent(event.currentTarget.value)}
+              minRows={20}
+            />
+          ) : (
+            <TypewriterTextarea content={emailContent} />
+          )}
+          */}
+
+          <div className="flex flex-row justify-center gap-16">
+            {/* <Button
+              variant="outline"
+              onClick={() => setIsEditing((prev) => !prev)}
+            >
+              {isEditing ? 'Done' : 'Edit'}
+            </Button> */}
+            <Button
+              className="px-4 py-2 text-base bg-blue-300 rounded hover:bg-blue-200 hover:outline hover:outline-2 hover:outline-blue-700"
+              onClick={() => handleSend()}
+              variant="gradient"
+              gradient={{ from: '#1d4ed8', to: '#06b6d4' }}
+              disabled={emailContent === ''}
+            >
+              Send Email
+            </Button>
+          </div>
         </div>
       </div>
     </>

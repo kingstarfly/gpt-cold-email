@@ -8,12 +8,12 @@ type NavigationLayoutProps = {
 
 const NavigationLayout = ({ children }: NavigationLayoutProps) => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-white to-blue-50">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-100 via-blue-100 to-blue-200">
       <header className="flex flex-row items-center justify-between px-4 py-2 rounded-md shadow-md">
         <Link to={routes.home()}>coldMaiL</Link>
         <UserAvatar />
       </header>
-      <main className="flex flex-row flex-1 pt-8">{children}</main>
+      <main className="flex flex-row flex-1 py-8">{children}</main>
     </div>
   )
 }
