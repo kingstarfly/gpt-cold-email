@@ -5,6 +5,6 @@ export const schema = gql`
     finish_reason: String!
   }
   type Query {
-    getColdEmail(input: String!): Openai! @skipAuth
+    getColdEmail(resume: String!, description: String!): Openai! @skipAuth
   }
 `
