@@ -35,7 +35,7 @@ model JobApplication {
   userId      Int
   companyId   Int
 
-  status      String // saved or completed
+  status      String // draft or sent
   position    String
   dateApplied DateTime?
 

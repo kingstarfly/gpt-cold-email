@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { db } from 'api/src/lib/db'
+import { hashPassword } from '@redwoodjs/api'
 
 export default async () => {
   try {
@@ -9,7 +10,13 @@ export default async () => {
     //
     // Update "const data = []" to match your data model and seeding needs
     //
-    const data: Prisma.UserExampleCreateArgs['data'][] = [
+
+    type UserData = Pick<
+      Prisma.UserCreateArgs['data'],
+      'firstName' | 'lastName' | 'email'
+    >
+    type UserDataWithPassword = UserData & { password: string }
+    const usersData: UserDataWithPassword[] = [
       // To try this example data with the UserExample model in schema.prisma,
       // uncomment the lines below and run 'yarn rw prisma migrate dev'
       //
@@ -17,7 +24,40 @@ export default async () => {
       // { name: 'mark', email: 'mark@example.com' },
       // { name: 'jackie', email: 'jackie@example.com' },
       // { name: 'bob', email: 'bob@example.com' },
+      {
+        firstName: 'Alice',
+        lastName: 'Doe',
+        email: 'alicedoe@example.com',
+        password: 'alicedoe',
+      },
+      {
+        firstName: 'Bob',
+        lastName: 'Doe',
+        email: 'bobdoe@example.com',
+        password: 'bobdoe',
+      },
+      {
+        firstName: 'Charles',
+        lastName: 'Doe',
+        email: 'charledoe@example.com',
+        password: 'charlesdoe',
+      },
     ]
+
+    const companies = [
+      {
+        name: 'Meta',
+        recruiterName: 'Recruiter Meta',
+        recruiterEmail: 'recruiter@meta.com',
+        companyValues: "Meta's company values",
+      },
+      {
+        name: 'Google',
+        recruiterName: 'Recruiter Google',
+        recruiterEmail: 'recruiter@google.com',
+        companyValues: "Google's company values",
+      },
+    ] satisfies Prisma.CompanyCreateArgs['data'][]
     console.log(
       "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
     )
@@ -28,8 +68,28 @@ export default async () => {
       //
       // Change to match your data model and seeding needs
       //
-      data.map(async (data: Prisma.UserExampleCreateArgs['data']) => {
-        const record = await db.userExample.create({ data })
+      ...usersData.map(async (userData) => {
+        const [hashedPassword, salt] = hashPassword(userData.password)
+        const record = await db.user.create({
+          data: {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            hashedPassword,
+            salt,
+          },
+        })
+        console.log(record)
+      }),
+      ...companies.map(async (company) => {
+        const record = await db.company.create({
+          data: {
+            name: company.name,
+            recruiterName: company.recruiterName,
+            recruiterEmail: company.recruiterEmail,
+            companyValues: company.companyValues,
+          },
+        })
         console.log(record)
       })
     )
